@@ -71,13 +71,6 @@ TEMPLATES = [
     },
 ]
 ASGI_APPLICATION = 'planningpoker.asgi.application'
-
-CHANNEL_LAYERS = {
-    'default':{
-        'BACKEND':'channels.layers.InMemoryChannelLayer'
-    }
-}
-
 WSGI_APPLICATION = 'planningpoker.wsgi.application'
 
 # Database
@@ -143,8 +136,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #     },
 # }
 
-# CHANNEL_LAYERS = {
-#     'default': {
-#         'BACKEND': 'channels.layers.InMemoryChannelLayer',
-#     },
-# }
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+
+
+
