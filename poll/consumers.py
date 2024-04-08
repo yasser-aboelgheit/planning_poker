@@ -1,49 +1,22 @@
-# import json
-# from channels.generic.websocket import WebsocketConsumer
-
-# class ChatConsumer(WebsocketConsumer):
-#     async def connect(self) :
-#         self.group_name = 'notification'
-#         # join to group
-#         await self.channel_layer.group_add(self.group_name, self.channel_name)
-
-#         await self.accept()
-    
-#     async def disconnect(self):
-#         # leave group
-#         await self.channel_layer.group_discard(self.group_name,
-#                                                self.channel_name)
-
-#     # Receive message from websocket
-#     async def receive(self, text_data):
-#         text_data_json = json.loads(text_data)
-#         message = text_data_json[ 'message']
-#         event = {
-#             'type': 'send_message',
-#             'message': message
-#         }
-#         # send message to group
-#         await self.channel_layer.group_send(self.group_name, event)
-
-#     # Receive message from group
-#     async def send_message (self, event) :
-#         message = event['message']
-
-#         # send message to websocket
-#         await self.send(text_data=json.dumps ({'message': message} ))
-
-
 import json
 from channels.generic.websocket import WebsocketConsumer
 from asgiref.sync import async_to_sync
 
 class ChatConsumer(WebsocketConsumer):
+    usernames = []
+    messages = {}
     def connect(self):
+        print(self.scope['path'])
         self.room_group_name = str(self.scope['path'].replace("/", ""))
         url = self.scope['path']
+        if not self.room_group_name in self.messages:
+            self.messages[self.room_group_name] = {}
+
         print(url)
 
         print("Sssssss")
+        print(self.room_group_name)
+        print(self.channel_name)
         print(self.__dict__)
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -56,21 +29,35 @@ class ChatConsumer(WebsocketConsumer):
     def receive(self, text_data):
         print("inside receive ")
         text_data_json = json.loads(text_data)
-        message = text_data_json['message']
+        vote = text_data_json.get('vote', "")
+        username = text_data_json['username']
+        print(username)
+        print(vote)
 
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type':'chat_message',
-                'message':message
+                'vote':vote,
+                'username': username
             }
         )
 
     def chat_message(self, event):
+        
         print("inside chat_message ")
-        message = event['message']
-
+        print(self.room_group_name)
+        vote = event['vote']
+        username = event['username']
+        if username not in self.usernames:
+            self.usernames.append(username)
+        print(self.usernames)
+        print()
+        self.messages[self.room_group_name][username] = username + ' voted ' + vote
+        messages = self.messages[self.room_group_name]
         self.send(text_data=json.dumps({
             'type':'chat',
-            'message':message
+            'message': list(messages.values()),
+            'vote': vote,
+            'username': username
         }))

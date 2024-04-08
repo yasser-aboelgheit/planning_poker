@@ -18,3 +18,9 @@ def create_ticket_view(request, *args, **kwargs):
 
 class PollView(TemplateView):
     template_name = 'planning/poll.html'
+
+
+    def dispatch(self, request, *args, **kwargs):
+        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
+        print(request.GET.get("TicketTitle"))
+        return super().dispatch(request, *args, **kwargs)

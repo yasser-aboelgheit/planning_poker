@@ -9,6 +9,9 @@
 <titLe>Poll</title>
 </head>
 <style>
+  .hidden {
+    display: none;
+}
   .rectangular-label {
     display: inline-block;
     background-color: #007bff; /* Default background color */
@@ -22,8 +25,18 @@
 <body>
 <div class="container">
   <h2 style="text-align: center;">Ticket Title: <span id="ticket-title"></span></h2>
+  
   <div class="row mt-5 justify-content-center">
-    <div id="radioContainer">
+    <div id="usernameForm">
+      <h2>Enter Username</h2>
+      <form id="usernameInputForm">
+          <input type="text" id="usernameInput" placeholder="Enter Username">
+          <button type="button" onclick="showAgeForm()">Next</button>
+      </form>
+  </div>
+
+
+    <div id="radioContainer" class="hidden">
       <!-- The select field will be inserted here -->
   </div>
     <!-- <div class="col-4">
@@ -45,7 +58,17 @@
 <script>
   console.log(window.location);
   var url = window.location.href;
-  var match = url.match(/\/poll\/(\d+)\/$/);
+  var parts = url.split('/');
+
+  // Get the last part of the URL, which should be the ID
+  var lastPart = parts[4];
+
+  // Split the last part by '?' to separate the ID from the query parameters
+  var id = lastPart
+  
+  console.log(id);
+  console.log("start");
+  console.log(url);
 
 // Create a URLSearchParams object from the URL
 const searchParams = new URLSearchParams(window.location.search);
@@ -83,13 +106,14 @@ const searchParams = new URLSearchParams(window.location.search);
       radioButton.addEventListener('change', function(event) {
           // Log the selected value
           console.log(event.target.value);
-          const username = document.querySelector('#username');
+          const username = document.querySelector('#usernameInput');
 
           console.log(rating)
-          const message = event.target.value + ' clicked the button!';
+          //const message = username.value + ' clicked the button!' + event.target.value ;
           
           notificationSocket.send(JSON.stringify({
-          'message': message
+          'vote': event.target.value,
+          'username': username.value
         }));
         });
     });
@@ -98,10 +122,9 @@ const searchParams = new URLSearchParams(window.location.search);
     console.log(rating);
 
   // Extract the number
-  var number = match ? match[1] : null;
+  console.log("ANA RATING22");
 
-  console.log(number);
-  const notificationSocket = new WebSocket(`ws://${window.location.host}/ws/poll/${number}/`);
+  const notificationSocket = new WebSocket(`ws://${window.location.host}/ws/poll/${id}/`);
 
 
 
@@ -111,14 +134,25 @@ const searchParams = new URLSearchParams(window.location.search);
     const data = JSON.parse(e.data) ;
     console.log("AAA11");
     console.log(data.message);
-    document.querySelector('#log').innerHTML += (data.message + '<br>');
+    console.log(data.type);
+    console.log(data.username);
+
+    //consloe.log(data.username);
+    console.log(typeof data.message);
+    document.querySelector('#log').innerHTML = '';
+    for (let key in data.message) {
+      console.log(key, data.message[key]);
+      document.querySelector('#log').innerHTML += (data.message[key] + '<br>');
+    }
+    
+    //document.querySelector('#log').innerHTML = (data.message + '<br>');
   };
   notificationSocket.onclose = function (e) {
   console.error('Chat socket closed unexpectedly');
   };
 
 
-
+/*
   document.querySelector('#button').onclick = function (e) {
     const username = document.querySelector('#username');
 
@@ -129,6 +163,18 @@ const searchParams = new URLSearchParams(window.location.search);
     'message': message
   }));
   };
+*/
+
+  function showAgeForm() {
+    // Hide username form
+    document.getElementById('usernameForm').classList.add('hidden');
+    /*const username = document.querySelector('#usernameInput');
+    notificationSocket.send(JSON.stringify({
+      'username': username.value
+    }));*/
+    // Show age form
+    document.getElementById('radioContainer').classList.remove('hidden');
+}
 </script>
 </body>
 </html>
