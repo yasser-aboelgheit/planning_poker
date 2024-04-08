@@ -5,7 +5,7 @@ from asgiref.sync import async_to_sync
 
 logger = logging.getLogger(__name__)
 
-class ChatConsumer(WebsocketConsumer):
+class PollConsumer(WebsocketConsumer):
     usernames = []
     messages = {}
 
@@ -30,13 +30,12 @@ class ChatConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
-                'type': 'chat_message',
                 'vote': vote,
                 'username': username
             }
         )
 
-    def chat_message(self, event):
+    def poll_message(self, event):
         vote = event['vote']
         username = event['username']
         if username not in self.usernames:
@@ -45,7 +44,6 @@ class ChatConsumer(WebsocketConsumer):
         self.messages[self.room_group_name][username] = username + ' voted  ' + vote
         messages = self.messages[self.room_group_name]
         self.send(text_data=json.dumps({
-            'type': 'chat',
             'message': messages,
             'vote': vote,
             'username': username

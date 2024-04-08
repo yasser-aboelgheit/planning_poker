@@ -12,9 +12,9 @@ urlpatterns = [
 
 # from channels.routing import ProtocolTypeRouter, URLRouter
 # from django.urls import path
-# from .views import ChatConsumer
+# from .views import PollConsumer
 # application = ProtocolTypeRouter({
 #     'websocket': URLRouter([
-#         path('ws/chat/', ChatConsumer.as_asgi()),
+#         path('ws/chat/', PollConsumer.as_asgi()),
 #     ])
 # })
