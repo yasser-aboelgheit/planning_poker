@@ -53,7 +53,7 @@ class ChatConsumer(WebsocketConsumer):
             self.usernames.append(username)
         print(self.usernames)
         print()
-        self.messages[self.room_group_name][username] = username + ' voted ' + vote
+        self.messages[self.room_group_name][username] = username + ' voted  ' + vote
         messages = self.messages[self.room_group_name]
         self.send(text_data=json.dumps({
             'type':'chat',
