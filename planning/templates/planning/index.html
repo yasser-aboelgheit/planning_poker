@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+  </head>
+  <body>
+    <h1>Ticket Name</h1>
+    <!-- <h2>Your ID: <span id="ws-id"></span></h2> -->
+    <form action="{% url 'create_ticket_view' %}" method="POST">
+      {% csrf_token %}
+        <label for="TicketTitle">Ticket Title</label><br>
+        <input type="text" id="TicketTitle" name="TicketTitle" placeholder="enter ticket title"><br><br><br>
+        <label for="TicketTitle">Enter Ratings comma separated</label><br>
+        <input type="text" id="TicketRating" name="TicketRating" placeholder="example: 1,3,5,6,coffe"><br>
+      <input type="submit" value="SEND"></input>
+    </form>
+    <ul id="messages"></ul>
+    <script src="/static/script.js"></script>
+  </body>
+</html>
