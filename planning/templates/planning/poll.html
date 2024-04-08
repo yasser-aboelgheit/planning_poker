@@ -55,6 +55,15 @@
       <div id="radioContainer" class="hidden">
         <!-- The select field will be inserted here -->
       </div>
+      <div id="showVotes" class="row justify-content-center mt-5 hidden">
+        <div class="col-8">
+          <p id="log"></p>
+          <div class="d-flex">
+            <button onclick="showVotes()" class="btn btn-primary me-2">Show Votes</button>
+            <button onclick="resetVotes()" class="btn btn-primary">Reset Votes</button>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="row justify-content-center mt-5">
       <div class="col-8">
@@ -97,9 +106,8 @@
       const logElement = document.querySelector('#log');
       logElement.innerHTML = '';
       const messages = data.message;
-      console.log(messages);
       for (let username in messages) {
-        logElement.innerHTML += `${messages[username]}<br>`;
+        logElement.innerHTML += `<p class='initial_votes'>${username} Voted </p> <p class='hidden hidden_votes'> ${messages[username]}</p>`;
       }
     }
 
@@ -131,6 +139,25 @@
     function usernameForm() {
       document.getElementById('usernameForm').classList.add('hidden');
       document.getElementById('radioContainer').classList.remove('hidden');
+      document.getElementById('showVotes').classList.remove('hidden');
+    }
+
+    function showVotes() {
+      const elements = document.querySelectorAll('.hidden_votes');
+      elements.forEach(element => {
+        // Remove the unwanted class from each element
+        element.classList.remove('hidden');
+    });
+    const init_elements = document.querySelectorAll('.initial_votes');
+      init_elements.forEach(element => {
+        // Remove the unwanted class from each element
+        element.classList.add('hidden');
+    });
+    }
+
+    function resetVotes() {
+      const logElement = document.querySelector('#log');
+      logElement.innerHTML = '';
     }
   </script>
 </body>

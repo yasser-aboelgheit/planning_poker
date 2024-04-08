@@ -57,7 +57,7 @@ class ChatConsumer(WebsocketConsumer):
         messages = self.messages[self.room_group_name]
         self.send(text_data=json.dumps({
             'type':'chat',
-            'message': list(messages.values()),
+            'message': messages,
             'vote': vote,
             'username': username
         }))
