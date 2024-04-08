@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>create-ticket</title>
   <style>
@@ -11,6 +12,7 @@
       height: 100vh;
       margin: 0;
     }
+
     form {
       width: 400px;
       padding: 20px;
@@ -18,12 +20,15 @@
       background-color: #f0f0f0;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
+
     h1 {
       text-align: center;
     }
+
     label {
       font-weight: bold;
     }
+
     input[type="text"] {
       width: 100%;
       padding: 8px;
@@ -32,6 +37,7 @@
       border-radius: 4px;
       box-sizing: border-box;
     }
+
     input[type="submit"] {
       width: 100%;
       padding: 10px;
@@ -41,11 +47,13 @@
       border-radius: 4px;
       cursor: pointer;
     }
+
     input[type="submit"]:hover {
       background-color: #0056b3;
     }
   </style>
 </head>
+
 <body>
   <form action="{% url 'create_ticket_view' %}" method="POST">
     {% csrf_token %}
@@ -58,4 +66,5 @@
   </form>
   <ul id="messages"></ul>
 </body>
+
 </html>

@@ -12,7 +12,6 @@ services:
 
   test:
     build: .
-    command: python manage.py test 
+    command: python manage.py test
     depends_on:
-        - django
-
+      - django

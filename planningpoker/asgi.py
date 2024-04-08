@@ -27,13 +27,12 @@
 
 # application = ProtocolTypeRouter({
 #     'http': get_asgi_application(),
-#     'websocket': 
+#     'websocket':
 #         URLRouter(
 #             poll.routing.websocket_urlpatterns
 #         )
-    
-# })
 
+# })
 
 
 import os
@@ -43,13 +42,11 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 import poll.routing
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'planningpoker.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "planningpoker.settings")
 
-application = ProtocolTypeRouter({
-    'http':get_asgi_application(),
-    'websocket':AuthMiddlewareStack(
-        URLRouter(
-            poll.routing.websocket_urlpatterns
-        )
-    )
-})
+application = ProtocolTypeRouter(
+    {
+        "http": get_asgi_application(),
+        "websocket": AuthMiddlewareStack(URLRouter(poll.routing.websocket_urlpatterns)),
+    }
+)

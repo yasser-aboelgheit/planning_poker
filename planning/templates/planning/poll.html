@@ -1,194 +1,190 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link
-      rel="stylesheet"
-      href="https://c...content-available-to-author-only...r.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-      crossorigin="anonymous"
-    />
-    <title>Poll</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        margin: 0;
-      }
-      .container {
-        width: 400px;
-        padding: 20px;
-        border-radius: 10px;
-        background-color: #f0f0f0;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      }
-      h2 {
-        text-align: center;
-      }
-      .rectangular-label {
-        display: inline-block;
-        background-color: #007bff;
-        color: white;
-        text-align: center;
-        padding: 5px;
-        margin: 5px;
-        cursor: pointer;
-      }
-      .hidden {
-        display: none;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h2>Ticket Title: <span id="ticket-title"></span></h2>
 
-      <div class="row mt-5 justify-content-center">
-        <div id="usernameForm">
-          <h2>Enter Username</h2>
-          <form id="usernameInputForm" onsubmit="usernameForm(event)">
-            <input
-              type="text"
-              id="usernameInput"
-              placeholder="Enter Username"
-              class="form-control mb-2"
-            />
-            <button
-              type="submit"
-              class="btn btn-primary"
-            >
-              Next
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet"
+    href="https://c...content-available-to-author-only...r.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    crossorigin="anonymous" />
+  <title>Poll</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      width: 400px;
+      padding: 20px;
+      border-radius: 10px;
+      background-color: #f0f0f0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .rectangular-label {
+      display: inline-block;
+      background-color: #007bff;
+      color: white;
+      text-align: center;
+      padding: 5px;
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>Ticket Title: <span id="ticket-title"></span></h2>
+
+    <div class="row mt-5 justify-content-center">
+      <div id="usernameForm">
+        <h2>Enter Username</h2>
+        <form id="usernameInputForm" onsubmit="usernameForm(event)">
+          <input type="text" id="usernameInput" placeholder="Enter Username" class="form-control mb-2" />
+          <button type="submit" class="btn btn-primary">
+            Next
+          </button>
+        </form>
+      </div>
+
+      <div id="radioContainer" class="hidden">
+        <!-- The select field will be inserted here -->
+      </div>
+      <div id="showVotes" class="row justify-content-center mt-5 hidden">
+        <div class="col-8">
+          <p id="log"></p>
+          <div class="d-flex">
+            <button onclick="showVotes()" class="btn btn-primary me-2">
+              Show Votes
             </button>
-          </form>
-        </div>
-
-        <div id="radioContainer" class="hidden">
-          <!-- The select field will be inserted here -->
-        </div>
-        <div id="showVotes" class="row justify-content-center mt-5 hidden">
-          <div class="col-8">
-            <p id="log"></p>
-            <div class="d-flex">
-              <button onclick="showVotes()" class="btn btn-primary me-2">
-                Show Votes
-              </button>
-              <button onclick="resetVotes()" class="btn btn-primary">
-                Reset Votes
-              </button>
-            </div>
+            <button onclick="resetVotes()" class="btn btn-primary">
+              Reset Votes
+            </button>
           </div>
         </div>
       </div>
-      <div class="row justify-content-center mt-5">
-        <div class="col-8">
-          <p id="log"></p>
-        </div>
+    </div>
+    <div class="row justify-content-center mt-5">
+      <div class="col-8">
+        <p id="log"></p>
       </div>
     </div>
+  </div>
 
-    <script>
-      function getIdFromUrl() {
-        const url = window.location.href;
-        const parts = url.split("/");
-        return parts[4];
-      }
+  <script>
+    function getIdFromUrl() {
+      const url = window.location.href;
+      const parts = url.split("/");
+      return parts[4];
+    }
 
-      function getQueryParams() {
-        const searchParams = new URLSearchParams(window.location.search);
-        const rating = searchParams.get("TicketRating");
-        const title = searchParams.get("TicketTitle");
-        return { rating, title };
-      }
+    function getQueryParams() {
+      const searchParams = new URLSearchParams(window.location.search);
+      const rating = searchParams.get("TicketRating");
+      const title = searchParams.get("TicketTitle");
+      return { rating, title };
+    }
 
-      function generateRadioButtons(rating) {
-        let radioHTML = "";
-        const groups = rating.split("/");
-        groups.forEach((group) => {
-          const numbers = group.split(",");
-          numbers.forEach((number) => {
-            const id = `rating${number}`;
-            radioHTML += `
+    function generateRadioButtons(rating) {
+      let radioHTML = "";
+      const groups = rating.split("/");
+      groups.forEach((group) => {
+        const numbers = group.split(",");
+        numbers.forEach((number) => {
+          const id = `rating${number}`;
+          radioHTML += `
             <input type="radio" id="${id}" name="rating" value="${number}" style="display: none;">
-            <label class="rectangular-label" for="${id}" style="width: ${
-              5 * 10
+            <label class="rectangular-label" for="${id}" style="width: ${5 * 10
             }px">${number}</label>
           `;
-          });
         });
-        return radioHTML;
+      });
+      return radioHTML;
+    }
+
+    function updateLog(data) {
+      const logElement = document.querySelector("#log");
+      logElement.innerHTML = "";
+      const messages = data.message;
+      for (let username in messages) {
+        logElement.innerHTML += `<p class='initial_votes'>${username} Voted </p> <p class='hidden hidden_votes'> ${messages[username]}</p>`;
       }
+    }
 
-      function updateLog(data) {
-        const logElement = document.querySelector("#log");
-        logElement.innerHTML = "";
-        const messages = data.message;
-        for (let username in messages) {
-          logElement.innerHTML += `<p class='initial_votes'>${username} Voted </p> <p class='hidden hidden_votes'> ${messages[username]}</p>`;
-        }
-      }
+    document.addEventListener("DOMContentLoaded", function () {
+      const { rating, title } = getQueryParams();
+      const id = getIdFromUrl();
+      document.querySelector("#ticket-title").textContent = title;
+      document.getElementById("radioContainer").innerHTML =
+        generateRadioButtons(rating);
 
-      document.addEventListener("DOMContentLoaded", function () {
-        const { rating, title } = getQueryParams();
-        const id = getIdFromUrl();
-        document.querySelector("#ticket-title").textContent = title;
-        document.getElementById("radioContainer").innerHTML =
-          generateRadioButtons(rating);
-
-        const radioButtons = document.querySelectorAll('input[type="radio"]');
-        radioButtons.forEach((radioButton) => {
-          radioButton.addEventListener("change", function (event) {
-            const username = document.querySelector("#usernameInput").value;
-            const vote = event.target.value;
-            notificationSocket.send(JSON.stringify({ vote, username }));
-          });
+      const radioButtons = document.querySelectorAll('input[type="radio"]');
+      radioButtons.forEach((radioButton) => {
+        radioButton.addEventListener("change", function (event) {
+          const username = document.querySelector("#usernameInput").value;
+          const vote = event.target.value;
+          notificationSocket.send(JSON.stringify({ vote, username }));
         });
-
-        const notificationSocket = new WebSocket(
-          `ws://${window.location.host}/ws/poll/${id}/`
-        );
-        notificationSocket.onmessage = function (e) {
-          const data = JSON.parse(e.data);
-          updateLog(data);
-        };
-        notificationSocket.onclose = function (e) {
-          console.error("Chat socket closed unexpectedly");
-        };
       });
 
-      function usernameForm(event) {
-        event.preventDefault();
-        const usernameInputValue =
-          document.getElementById("usernameInput").value;
-        if (usernameInputValue.trim() !== "") {
-          document.getElementById("usernameForm").classList.add("hidden");
-          document.getElementById("radioContainer").classList.remove("hidden");
-          document.getElementById("showVotes").classList.remove("hidden");
-        } else {
-          alert("Username field is mandatory. Please enter a username.");
-        }
-      }
+      const notificationSocket = new WebSocket(
+        `ws://${window.location.host}/ws/poll/${id}/`
+      );
+      notificationSocket.onmessage = function (e) {
+        const data = JSON.parse(e.data);
+        updateLog(data);
+      };
+      notificationSocket.onclose = function (e) {
+        console.error("Chat socket closed unexpectedly");
+      };
+    });
 
-      function showVotes() {
-        const elements = document.querySelectorAll(".hidden_votes");
-        elements.forEach((element) => {
-          // Remove the unwanted class from each element
-          element.classList.remove("hidden");
-        });
-        const init_elements = document.querySelectorAll(".initial_votes");
-        init_elements.forEach((element) => {
-          // Remove the unwanted class from each element
-          element.classList.add("hidden");
-        });
+    function usernameForm(event) {
+      event.preventDefault();
+      const usernameInputValue =
+        document.getElementById("usernameInput").value;
+      if (usernameInputValue.trim() !== "") {
+        document.getElementById("usernameForm").classList.add("hidden");
+        document.getElementById("radioContainer").classList.remove("hidden");
+        document.getElementById("showVotes").classList.remove("hidden");
+      } else {
+        alert("Username field is mandatory. Please enter a username.");
       }
+    }
 
-      function resetVotes() {
-        const logElement = document.querySelector("#log");
-        logElement.innerHTML = "";
-      }
-    </script>
-  </body>
+    function showVotes() {
+      const elements = document.querySelectorAll(".hidden_votes");
+      elements.forEach((element) => {
+        // Remove the unwanted class from each element
+        element.classList.remove("hidden");
+      });
+      const init_elements = document.querySelectorAll(".initial_votes");
+      init_elements.forEach((element) => {
+        // Remove the unwanted class from each element
+        element.classList.add("hidden");
+      });
+    }
+
+    function resetVotes() {
+      const logElement = document.querySelector("#log");
+      logElement.innerHTML = "";
+    }
+  </script>
+</body>
+
 </html>
