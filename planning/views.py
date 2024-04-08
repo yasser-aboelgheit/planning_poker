@@ -13,14 +13,7 @@ def create_ticket_view(request, *args, **kwargs):
     TicketRating = request.POST.get("TicketRating") or "0,1/2,1,2,3,5,8,13"
 
     return redirect(reverse('poll_view', kwargs={'pk': random.randrange(0,9)}) + '?TicketTitle=' + str(TicketTitle) + '&TicketRating=' + str(TicketRating))
-    # return render(request, 'planning/poll.html', {'title': "titlo", 'articles': "articles"})
 
 
 class PollView(TemplateView):
     template_name = 'planning/poll.html'
-
-
-    def dispatch(self, request, *args, **kwargs):
-        print("HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH")
-        print(request.GET.get("TicketTitle"))
-        return super().dispatch(request, *args, **kwargs)

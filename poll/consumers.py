@@ -30,6 +30,7 @@ class PollConsumer(WebsocketConsumer):
         async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
+                'type': 'poll_message',
                 'vote': vote,
                 'username': username
             }
@@ -44,6 +45,7 @@ class PollConsumer(WebsocketConsumer):
         self.messages[self.room_group_name][username] = username + ' voted  ' + vote
         messages = self.messages[self.room_group_name]
         self.send(text_data=json.dumps({
+            'type': 'poll',
             'message': messages,
             'vote': vote,
             'username': username

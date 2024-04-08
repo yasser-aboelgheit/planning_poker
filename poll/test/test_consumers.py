@@ -25,17 +25,17 @@ class TestPollConsumer(unittest.TestCase):
         self.consumer.channel_layer.group_send.assert_called_once_with(
             "test_room",
             {
-                "type": "poll_message",
+                "type": "chat_message",
                 "vote": "yes",
                 "username": "user"
             }
         )
 
-    def test_poll_message(self):
+    def test_chat_message(self):
         event = {"vote": "yes", "username": "user"}
         self.consumer.usernames = []
         self.consumer.messages = {}
-        self.consumer.poll_message(event)
+        self.consumer.chat_message(event)
         self.assertIn("user", self.consumer.usernames)
         self.assertIn("user voted  yes", self.consumer.messages["test_room"]["user"])
 

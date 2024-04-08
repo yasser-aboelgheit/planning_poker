@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Chat</title>
+  <title>create-ticket</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -51,7 +51,7 @@
     {% csrf_token %}
     <h1>Ticket Name</h1>
     <label for="TicketTitle">Ticket Title</label><br>
-    <input type="text" id="TicketTitle" name="TicketTitle" placeholder="Enter ticket title"><br><br>
+    <input type="text" id="TicketTitle" name="TicketTitle" placeholder="Enter ticket title" required><br><br>
     <label for="TicketRating">Enter Ratings (comma separated)</label><br>
     <input type="text" id="TicketRating" name="TicketRating" placeholder="Example: 0,1/2,1,2,3,5,8,13"><br><br>
     <input type="submit" value="SEND">

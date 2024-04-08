@@ -137,9 +137,15 @@
     });
 
     function usernameForm() {
+      const usernameInputValue = document.getElementById('usernameInput').value;
+      if (usernameInputValue.trim() !== '') {
       document.getElementById('usernameForm').classList.add('hidden');
       document.getElementById('radioContainer').classList.remove('hidden');
       document.getElementById('showVotes').classList.remove('hidden');
+      }
+      else{
+      alert("Username field is mandatory. Please enter a username.");
+      }
     }
 
     function showVotes() {
