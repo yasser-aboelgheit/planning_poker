@@ -7,14 +7,3 @@ urlpatterns = [
     path('poll/<int:pk>/', PollView.as_view(), name='poll_view'),
     path('create_ticket/', create_ticket_view, name='create_ticket_view')
 ]
-
-
-
-# from channels.routing import ProtocolTypeRouter, URLRouter
-# from django.urls import path
-# from .views import PollConsumer
-# application = ProtocolTypeRouter({
-#     'websocket': URLRouter([
-#         path('ws/chat/', PollConsumer.as_asgi()),
-#     ])
-# })
