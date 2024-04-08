@@ -1,12 +1,6 @@
 version: '3'
 
 services:
-  redis:
-    restart: always
-    image: redis:6.2
-    ports:
-      - "6379:6379"
-  
   django:
     build: .
     command: bash -c "python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
@@ -15,5 +9,10 @@ services:
       - .:/poker_service
     ports:
       - "8000:8000"
+
+  test:
+    build: .
+    command: python manage.py test 
     depends_on:
-      - redis
+        - django
+
